@@ -67,16 +67,12 @@ function AllPlots() {
     <div className="allplots-container" >
       <div className="allplots-header">
         <a href={PageRoutes.homepage.path}>BACK</a>
-        <div className="headertxt-box">
-          <span>FIle</span>
-          {/* <span>{metaData.fileName}</span> */}
-          {/* <span>by {metaData.author}</span> */}
-          {/* <span>{metaData.date.split("T")[0]} - {metaData.date.split("T")[1]}</span> */}
-        </div>
       </div>
 
       <div className="allplots-body">
+
         <div className="allplots-leftcon">
+
           <div className="plots-actionsbox">
             <div className="plotselection-box">
               <p>Variable</p>
@@ -86,27 +82,35 @@ function AllPlots() {
             </div>
           </div>
           <div className="plots-areabox">
-            <h2>Table</h2>
+            <h2>(Table) - (Name)</h2>
 
+            <div className="plots-box">
+              <p>Plot</p>
+            </div>
             {fetchedData.map((row, index) => (
               <p key={index}>{row.Name}</p>
             ))}
 
           </div>
-          <h1>Plots Name | Item(s): 100</h1>
+          <p className="infotxt">Plots Name | Item(s): 100</p>
         </div>
+
         <div className="allplots-rightcon">
+          <div className="infoMeta">
+            <h1>Meta Data</h1>
+
+            {metaData.map((item, index) => (
+            <div key={index} className="metaInfoBox">
+              <p>{item.fileName}</p>
+              <p>{formatTimestamp(item.date)}</p>
+              <p>{item.author}</p>
+            </div>
+            ))}
+            
+          </div>
+          <div className="infoData"></div>
           <h1>CSV File Info</h1>
           <div className="csvfiledata-infobox">
-
-            {metaData && metaData.map((row, index) => (
-              <div key={index} className="metaBox">
-                <p>{row.fileName}</p>
-                <p>{formatTimestamp(row.date)}</p>
-                <p>{row.author}</p>
-              </div>
-            ))}
-
             <h3>Insights</h3>
           </div>
         </div>
@@ -118,12 +122,3 @@ function AllPlots() {
 }
 
 export default AllPlots;
-
-
-
-
-      {/* <pre>{JSON.stringify(metaData, null, 2)}</pre>
-
-      {fetchedData.map((row, index) => (
-        <p key={index}>{row.Name}</p>
-      ))} */}
