@@ -1,8 +1,9 @@
 import { useSearchParams } from "react-router-dom";
-import { PageRoutes, Porxy } from "../../Constants";
+import { PageRoutes, PlotTypes, Porxy, type CsvData } from "../../Constants";
 import { useEffect, useState } from "react";
 import "../../index.css"
 import "./AllPlots.css"
+import CustomPlots from "./CustomPlots";
 
 function AllPlots() {
 
@@ -12,7 +13,13 @@ function AllPlots() {
   const fileName = searchParams.get("filename");
 
   const [metaData, setMetaData] = useState<any[]>([]);
-  const [fetchedData, setFetchedData] = useState<any[]>([]);
+  const [fetchedData, setFetchedData] = useState<CsvData | null>(null);
+  const [open, setOpen] = useState(null);
+
+  const toggle = (name: any) => {
+    setOpen(open === name ? null : name);
+  };
+
 
   // mainData of CSV File
   useEffect(() => {
@@ -62,6 +69,7 @@ function AllPlots() {
   }
 
 
+  if (!fetchedData) return <p>Loading data...</p>;
 
   return (
     <div className="allplots-container" >
@@ -74,25 +82,28 @@ function AllPlots() {
         <div className="allplots-leftcon">
 
           <div className="plots-actionsbox">
-            <div className="plotselection-box">
-              <p>Variable</p>
+            <div className={`plotselection-box ${open === "variable" ? "open" : ""}`} >
+              <button className="dropdown-boxbtn" onClick={() => toggle("variable")}>Variable</button>
+              <div className="dropdown-itemsbox">
+                {fetchedData?.columns.map((col, index) => (
+                  <p key={index}>{col}</p>
+                ))}
+              </div>
             </div>
-            <div className="plotselection-box">
-              <p>Plot Type</p>
+            <div className={`plotselection-box ${open === "plot" ? "open" : ""}`} >
+              <button className="dropdown-boxbtn" onClick={() => toggle("plot")}>Plot</button>
+              <div className="dropdown-itemsbox">
+                {PlotTypes.map((plot, index) => (
+                  <p key={index}>{plot}</p>
+                ))}
+              </div>
             </div>
           </div>
           <div className="plots-areabox">
-            <h2>(Table) - (Name)</h2>
-
-            <div className="plots-box">
-              <p>Plot</p>
-            </div>
-            {fetchedData.map((row, index) => (
-              <p key={index}>{row.Name}</p>
-            ))}
-
+              <CustomPlots selectedPlot={"Table"} dataSet={fetchedData} />
+              <p>{fetchedData.columns.length}</p>
           </div>
-          <p className="infotxt">Plots Name | Item(s): 100</p>
+          <p className="infotxt">Plots Name | {fetchedData? `${fetchedData.data.length > 1 ? "Items" : "Item"}: ${fetchedData.data.length}`: "Loading..."}</p>
         </div>
 
         <div className="allplots-rightcon">
@@ -108,10 +119,48 @@ function AllPlots() {
             ))}
             
           </div>
-          <div className="infoData"></div>
-          <h1>CSV File Info</h1>
+
           <div className="csvfiledata-infobox">
-            <h3>Insights</h3>
+            <h3>CSV Insights</h3>
+            <div className="infoData">
+              <p>hi</p>
+              <p>hi</p>
+              <p>hi</p>
+              <p>hi</p>
+              <p>hi</p>
+              <p>hi</p>
+              <p>hi</p>
+              <p>hi</p>
+              <p>hi</p>
+              <p>hi</p>
+              <p>hi</p>
+              <p>hi</p>
+              <p>hi</p>
+              <p>hi</p>
+              <p>hi</p>
+              <p>hi</p>
+              <p>hi</p>
+              <p>hi</p>
+              <p>hi</p>
+              <p>hi</p>
+              <p>hi</p>
+              <p>hi</p>
+              <p>hi</p>
+              <p>hi</p>
+              <p>hi</p>
+              <p>hi</p>
+              <p>hi</p>
+              <p>hi</p>
+              <p>hi</p>
+              <p>hi</p>
+              <p>hi</p>
+              <p>hi</p>
+            </div>
+
+            <div className="otheractions">
+              <button>Download CSV</button>
+              <button>CSV to Json</button>
+            </div>
           </div>
         </div>
       </div>

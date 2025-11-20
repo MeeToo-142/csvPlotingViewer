@@ -39,9 +39,14 @@ def fetch_csv():
     if not os.path.exists(path):
         return jsonify({"error": "File not found"}), 404
     
-    print(path)
     df = pd.read_csv(path)
-    return jsonify(json.loads(df.to_json(orient="records")))
+    response = {
+        "columns": df.columns.tolist(),
+        "data": df.to_dict(orient="records")
+    }
+    
+    return jsonify(response)
+
 
 
 

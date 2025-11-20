@@ -13,6 +13,18 @@ export interface UploadData {
   description: string;
 }
 
+export interface CustomPlotsProps{
+  selectedPlot: string;
+  dataSet: any;
+};
+
+export interface CsvData {
+  columns: string[];
+  data: Record<string, any>[];
+}
+
+
+
 
 export const Porxy = 'http://127.0.0.1:5000'
 
