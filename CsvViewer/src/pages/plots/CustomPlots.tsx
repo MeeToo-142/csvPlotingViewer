@@ -20,7 +20,6 @@ function PlotTable({ dataSet, selectedColumns }: { dataSet: any; selectedColumns
             : dataSet.columns
     ;
 
-
   return (
     <div className="ctableContainer">
       <div className="ctable-wrapper">
@@ -45,6 +44,17 @@ function PlotTable({ dataSet, selectedColumns }: { dataSet: any; selectedColumns
       </div>
     </div>
   );
+}
+
+function PlotLineGraph({ dataSet, selectedArg, graphCount }: 
+    { dataSet: any; selectedArg: any, graphCount: number } ){
+
+
+    return (
+        <div className="lineGraph-container">
+            
+        </div>
+    )
 }
 
 
