@@ -13,14 +13,18 @@ export interface UploadData {
   description: string;
 }
 
-export interface CustomPlotsProps{
+export interface CustomPlotsProps {
   selectedPlot: string;
   dataSet: any;
-};
+  selectedColumns?: string[];
+}
+
 
 export interface CsvData {
   columns: string[];
   data: Record<string, any>[];
+  info:any;
+  NaN:any
 }
 
 
@@ -32,7 +36,7 @@ export const PageRoutes = {
   homepage: {path: "/", component: Home},
   viewplotspage: {path: "/view-plots", component: AllPlots},
   waitingroompage: {path: "/convert/file", component: WaitingRoom},
-  downloadpage: {path: "/download/:tokenId", component: DownloadFile},
+  downloadpage: {path: "/download/file", component: DownloadFile},
 }
 
 export const PlotTypes = ["Table", "Bar Chart", "Line Graph", "Histogram", "Scatter Chart", "Box Chart" ]

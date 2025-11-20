@@ -12,7 +12,6 @@
   flex: 1;
   overflow-x: auto;
   overflow-y: auto;
-  /* border: 1px solid #ccc; */
   border-radius: 6px;
   box-sizing: border-box;
 }
@@ -27,12 +26,12 @@
 .ctable-header-row th {
   position: sticky;
   top: -1px;
-  left: 0;
+  left: -1px;
   background-color: var(--color-five);
   padding: 1rem 1.5rem;
   line-height: 1.5;
   font-weight: 700;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-six);
   text-align: left;
   z-index: 10;
   white-space: nowrap;
@@ -41,14 +40,14 @@
 
 .ctable-row td {
   padding: 0.5rem 1rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-six);
   white-space: nowrap;
   min-width: 120px;
 }
 
 /* Optional: alternate row background for readability */
 .ctable-row:nth-child(even) {
-  background-color: var(--color-three);
+  background-color: var(--color-four);
 }
 
 /* Empty box */

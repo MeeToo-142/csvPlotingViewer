@@ -1,171 +1,161 @@
 import { useSearchParams } from "react-router-dom";
 import { PageRoutes, PlotTypes, Porxy, type CsvData } from "../../Constants";
 import { useEffect, useState } from "react";
-import "../../index.css"
-import "./AllPlots.css"
+import "../../index.css";
+import "./AllPlots.css";
 import CustomPlots from "./CustomPlots";
+import { Dropdown } from "../../components/dropdowns/DropDown";
 
 function AllPlots() {
-
   const [searchParams] = useSearchParams();
-
   const fileId = searchParams.get("id");
   const fileName = searchParams.get("filename");
 
   const [metaData, setMetaData] = useState<any[]>([]);
   const [fetchedData, setFetchedData] = useState<CsvData | null>(null);
-  const [open, setOpen] = useState(null);
+  const [open, setOpen] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedColumns, setSelectedColumns] = useState<string[]>([]);
+  const [selectedPlotType, setSelectedPlotType] = useState<string>("Table");
 
-  const toggle = (name: any) => {
-    setOpen(open === name ? null : name);
+
+  const toggleDropdown = (id: string | null) => {
+    setOpen(prev => (prev === id ? null : id));
   };
 
-
-  // mainData of CSV File
+  // Fetch CSV data
   useEffect(() => {
-    const fetchData = async () => {
-        if (!fileId || !fileName) return;
+    if (!fileId || !fileName) return;
 
-        try {
-            const response = await fetch(`${Porxy}/view-plots?id=${fileId}&filename=${fileName}`);
-            if (!response.ok) throw new Error(`Failed to fetch CSV: ${response.status}`);
-            
-            const data = await response.json();
-            setFetchedData(data);
-        } catch (err) {
-            console.error(err);
-        }
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`${Porxy}/view-plots?id=${fileId}&filename=${fileName}`);
+        if (!response.ok) throw new Error(`Failed to fetch CSV: ${response.status}`);
+        const data = await response.json();
+        setFetchedData(data);
+      } catch (err: any) {
+        console.error(err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
     };
+
     fetchData();
   }, [fileId, fileName]);
 
-  // metaData of Upload Inputs
+  // Fetch metadata from localStorage
   useEffect(() => {
     const localData = localStorage.getItem("uploadedFiles");
-    if (!localData) return;
-    setMetaData(JSON.parse(localData));
+    if (localData) setMetaData(JSON.parse(localData));
   }, []);
 
-
-  function formatTimestamp(isoString: string) {
+  const formatTimestamp = (isoString: string) => {
     const date = new Date(isoString);
-
-    const optionsDate: Intl.DateTimeFormatOptions = {
+    return date.toLocaleString("en-US", {
       month: "short",
       day: "2-digit",
       year: "numeric",
-    };
-
-    const optionsTime: Intl.DateTimeFormatOptions = {
       hour: "2-digit",
       minute: "2-digit",
       hour12: true,
-    };
+    });
+  };
 
-    const formattedDate = date.toLocaleDateString("en-US", optionsDate);
-    const formattedTime = date.toLocaleTimeString("en-US", optionsTime);
+  if (loading) return <p>Loading data...</p>;
+  if (error) return <p>Error: {error}</p>;
+  if (!fetchedData) return <p>No data available.</p>;
 
-    return `${formattedDate} at ${formattedTime}`;
-  }
-
-
-  if (!fetchedData) return <p>Loading data...</p>;
+  // Filter metadata for current file
+  const currentMeta = metaData.filter(item => item.fileName === fileName);
 
   return (
-    <div className="allplots-container" >
+    <div className="allplots-container">
+      {/* HEADER */}
       <div className="allplots-header">
         <a href={PageRoutes.homepage.path}>BACK</a>
       </div>
 
+      {/* BODY */}
       <div className="allplots-body">
-
+        {/* LEFT SIDE */}
         <div className="allplots-leftcon">
-
-          <div className="plots-actionsbox">
-            <div className={`plotselection-box ${open === "variable" ? "open" : ""}`} >
-              <button className="dropdown-boxbtn" onClick={() => toggle("variable")}>Variable</button>
-              <div className="dropdown-itemsbox">
-                {fetchedData?.columns.map((col, index) => (
-                  <p key={index}>{col}</p>
-                ))}
-              </div>
-            </div>
-            <div className={`plotselection-box ${open === "plot" ? "open" : ""}`} >
-              <button className="dropdown-boxbtn" onClick={() => toggle("plot")}>Plot</button>
-              <div className="dropdown-itemsbox">
-                {PlotTypes.map((plot, index) => (
-                  <p key={index}>{plot}</p>
-                ))}
-              </div>
-            </div>
-          </div>
           <div className="plots-areabox">
-              <CustomPlots selectedPlot={"Table"} dataSet={fetchedData} />
-              <p>{fetchedData.columns.length}</p>
+            <CustomPlots
+              selectedPlot={selectedPlotType}
+              dataSet={fetchedData}
+              selectedColumns={selectedColumns}
+            />
           </div>
-          <p className="infotxt">Plots Name | {fetchedData? `${fetchedData.data.length > 1 ? "Items" : "Item"}: ${fetchedData.data.length}`: "Loading..."}</p>
+
+          {currentMeta.map((item, index) => (
+            <div key={index} className="metaInfoBox">
+              <p>{`${fetchedData.data.length > 1 ? "Items" : "Item"}: [ ${fetchedData.data.length} ]`}</p>
+              <p>File - {item.fileName}</p>
+              <p>Uploaded on {formatTimestamp(item.date)}</p>
+              <p>by {item.author}</p>
+            </div>
+          ))}
         </div>
 
+        {/* RIGHT SIDE */}
         <div className="allplots-rightcon">
+          {/* DROPDOWNS */}
           <div className="infoMeta">
-            <h1>Meta Data</h1>
+            <h2>Actions</h2>
+            <div className="plots-actionsbox">
+              <Dropdown
+                label="Column"
+                items={fetchedData.columns}
+                id="columns"
+                openId={open}
+                setOpenId={toggleDropdown}
+                selectedItems={selectedColumns}
+                setSelectedItems={setSelectedColumns}
+              />
 
-            {metaData.map((item, index) => (
-            <div key={index} className="metaInfoBox">
-              <p>{item.fileName}</p>
-              <p>{formatTimestamp(item.date)}</p>
-              <p>{item.author}</p>
+              <Dropdown
+                label="Plot Type"
+                items={PlotTypes}
+                id="plotType"
+                openId={open}
+                setOpenId={toggleDropdown}
+                selectedItems={[selectedPlotType]}
+                setSelectedItems={(arr) => setSelectedPlotType(arr[0] || "Table")}
+              />
             </div>
-            ))}
-            
           </div>
 
+          {/* CSV INFO BOX */}
           <div className="csvfiledata-infobox">
-            <h3>CSV Insights</h3>
             <div className="infoData">
-              <p>hi</p>
-              <p>hi</p>
-              <p>hi</p>
-              <p>hi</p>
-              <p>hi</p>
-              <p>hi</p>
-              <p>hi</p>
-              <p>hi</p>
-              <p>hi</p>
-              <p>hi</p>
-              <p>hi</p>
-              <p>hi</p>
-              <p>hi</p>
-              <p>hi</p>
-              <p>hi</p>
-              <p>hi</p>
-              <p>hi</p>
-              <p>hi</p>
-              <p>hi</p>
-              <p>hi</p>
-              <p>hi</p>
-              <p>hi</p>
-              <p>hi</p>
-              <p>hi</p>
-              <p>hi</p>
-              <p>hi</p>
-              <p>hi</p>
-              <p>hi</p>
-              <p>hi</p>
-              <p>hi</p>
-              <p>hi</p>
-              <p>hi</p>
+              <h2>Missing values per column:</h2>
+              {fetchedData.NaN && Object.entries(fetchedData.NaN as Record<string, number>).map(([col, count], index) => (
+                <div key={col} style={{display:'flex', justifyContent:"space-between", alignContent:"center", paddingRight:"1.5rem"}}>
+                  <span>{index+1} - {col}:</span>
+                  <span>{count as number}</span>
+                </div>
+              ))}
+
+              <br/>
+              <p>==================</p>
+              <br/>
+
+              <h2>CSV Insights</h2>
+              {fetchedData.info.map((line: string, i: number) => (
+                <p key={i}>{line}</p>
+              ))}
             </div>
 
             <div className="otheractions">
               <button>Download CSV</button>
-              <button>CSV to Json</button>
+              <button>CSV to JSON</button>
             </div>
           </div>
         </div>
       </div>
-
-
     </div>
   );
 }

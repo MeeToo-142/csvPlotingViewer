@@ -66,8 +66,7 @@ function Home() {
     const url = `${PageRoutes.viewplotspage.path}?id=${fileData.id}&filename=${fileData.fileName}`
     navigate(url);
 
-    console.log(url);
-
+    // console.log(url);
   };
 
 

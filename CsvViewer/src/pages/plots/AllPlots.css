@@ -1,218 +1,144 @@
 .allplots-container {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    padding: 6rem 3rem 1rem 3rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-/* HEADER */
-.allplots-header {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 1rem;
-    /* border: 1px dashed #999; */
-}
-
-.allplots-header a {
-    padding: 0.4rem 1.5rem;
-    background-color: var(--color-five);
-    border-radius: 4px;
-    box-shadow: 0 0 10px var(--color-three);
-    font-size: 0.95rem;
-    text-decoration: none;
-    color: var(--color-six);
-}
-
-
-
-/* BODY: LEFT + RIGHT */
-.allplots-body {
-    width: 100%;
-    height: calc(100% - 4rem);
-    display: flex;
-    gap: 1.5rem;
-}
-
-
-
-/* LEFT SIDE CONTENT */
-.allplots-leftcon {
-    width: 80%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    /* border: 1px dashed #999; */
-}
-
-/* Container holding both dropdowns */
-.plots-actionsbox {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-}
-
-/* Box around each dropdown */
-.plotselection-box {
-    position: relative;
-}
-
-/* Dropdown Buttons */
-.dropdown-boxbtn {
-    padding: 0.5rem 1.4rem;
-    background-color: var(--color-five);
-    color: var(--color-six);
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.92rem;
-    font-weight: 600;
-    transition: opacity 0.2s ease;
-    box-shadow: 0 0 8px var(--color-three);
-}
-
-.dropdown-boxbtn:hover {
-    opacity: 0.8;
-}
-
-/* Dropdown List Container */
-.dropdown-itemsbox {
-    position: absolute;
-    top: 110%;
-    left: 0;
-    width: 160px;
-    background: var(--color-three);
-    border-radius: 10px;
-    padding: 0.4rem 0;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    z-index: 20;
-
-    /* Closed state */
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-6px);
-    transition: all 0.18s ease;
-
-    backdrop-filter: blur(10px);
-}
-
-/* Show dropdown when parent has .open class */
-.plotselection-box.open .dropdown-itemsbox {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-
-/* Dropdown item */
-.dropdown-itemsbox p {
-    margin: 0;
-    padding: 0.55rem 1rem;
-    font-size: 0.9rem;
-    color: var(--color-six);
-    cursor: pointer;
-    transition: background 0.18s ease;
-}
-
-/* Hover effect */
-.dropdown-itemsbox p:hover {
-    background: var(--color-five);
-    color: var(--color-three);
-}
-
-.plots-areabox {
-  flex: 1;
-  /* border: 1px dashed #999; */
   width: 100%;
-  height: 100%;
+  height: 100vh;
+  padding-top: 5rem;
   display: flex;
   flex-direction: column;
-  padding: 0.3rem 0;
+  background: var(--color-three);
   overflow: hidden;
 }
 
-
-.infotxt {
-    font-weight: 500;
-    font-size: 0.85rem;
-    color: var(--color-six);
-    padding: 0.5rem 0;
-    width: 100%;
+.allplots-header {
+  width: 100%;
+  padding: 1.5rem 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  background: var(--color-three);
+  z-index: 100;
 }
 
+.allplots-header a {
+  padding: 0.4rem 1.5rem;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  text-decoration: none;
+  color: var(--color-six);
+  border: 1.3px solid var(--color-two);
+  background: none;
+  transition: all 0.2s ease;
+}
+.allplots-header a:hover {
+  background: var(--color-two);
+  transform: scale(1.05);
+}
 
+.allplots-body {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  gap: 1.5rem;
+  padding: 0 3rem;
+  overflow: hidden;
+}
 
-/* RIGHT SIDE CONTENT */
+.allplots-leftcon {
+  width: 75%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.plots-areabox {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.metaInfoBox {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.4rem 0;
+  border-top: 1px solid #eee;
+}
+
+.metaInfoBox p{
+    color: var(--color-five);
+    font-weight: 200;
+}
+
 .allplots-rightcon {
-    width: 20%;
-    height: 100%;
-    /* border: 1px dashed #999; */
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+  width: 25%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
 }
 
 .infoMeta {
-    flex-shrink: 0;
+    flex: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
-/* Headings */
-.infoMeta h1,
-.csvfiledata-infobox h3 {
-    margin-bottom: 0.5rem;
+.infoMeta h2 {
+  margin: 0;
+  padding-bottom: 0.5rem;
+  flex: 0;
 }
 
-/* Meta Info Boxes */
-.metaInfoBox {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-    padding: 0.4rem 0;
-    border-bottom: 1px solid #eee;
+
+.plots-actionsbox {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  max-width: 100%;
 }
 
-/* CSV Data Box */
+
+/* CSV info section: flex 2 */
 .csvfiledata-infobox {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    min-height: 0;
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 0;
 }
 
-/* Info Data with scroll */
 .csvfiledata-infobox .infoData {
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-    width: 100%;
-    padding: 0.3rem 0;
-    margin-bottom: 0.5rem;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding-right: 0.3rem;
+  min-height: 0;
 }
 
-/* Action Buttons */
+.infoData span,  
+.infoData p{
+  font-weight: 200;
+  letter-spacing: 0.73px;
+}
+
 .otheractions {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
-
 .otheractions button {
-    border: 1px solid var(--color-five);
-    box-shadow: 0 0 0 rgba(0, 0, 0, 0.15);
-    border-radius: 4px;
-    background: none;
-    transition: all 180ms ease;
-    padding: 0.5rem 1rem;
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--color-five);
+  border-radius: 6px;
+  background: none;
+  cursor: pointer;
+  transition: 0.18s ease;
 }
-
 .otheractions button:hover {
-    background: var(--color-five);
-    cursor: pointer;
-    transform: scale(1.03);
+  background: var(--color-five);
+  color: var(--color-three);
+  transform: scale(1.03);
 }

@@ -1,15 +1,16 @@
 from flask import Flask, request, jsonify
-import json
 from flask_cors import CORS
 import os
 import pandas as pd
+from io import StringIO
 
 app = Flask(__name__)
-CORS(app)
+
+# Enable CORS explicitly for development frontend
+CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 
 UPLOAD_FOLDER = "./uploaded"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
 
 # Upload CSV and save on server
 @app.route("/upload", methods=["POST"])
@@ -40,16 +41,22 @@ def fetch_csv():
         return jsonify({"error": "File not found"}), 404
     
     df = pd.read_csv(path)
+
+    buffer = StringIO()
+    df.info(buf=buffer)
+    info_str = buffer.getvalue().splitlines()
+
     response = {
         "columns": df.columns.tolist(),
-        "data": df.to_dict(orient="records")
+        "data": df.to_dict(orient="records"),
+        "info": info_str,
+        "NaN": df.isna().sum().to_dict()
     }
-    
+
     return jsonify(response)
 
 
-
-
+# Delete CSV
 @app.route("/delete", methods=["POST"])
 def delete_csv():
     data = request.json
@@ -65,6 +72,48 @@ def delete_csv():
         return jsonify({"status": "deleted"})
     else:
         return jsonify({"error": "File not found"}), 404
+
+
+@app.route("/convert/file", methods=["GET"])
+def convert_csvto():
+    data = request.json
+    file_id = data.get("id")
+    filename = data.get("filename")
+    convertTo = data.get("filetype")
+    return
+
+
+@app.route("/download/file", methods=["GET"])
+def download_file():
+    data = request.json
+    file_id = data.get("id")
+    filename = data.get("filename")
+    
+    return
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 if __name__ == "__main__":
