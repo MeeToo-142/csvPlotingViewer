@@ -17,6 +17,7 @@ export interface CustomPlotsProps {
   selectedPlot: string;
   dataSet: any;
   selectedColumns?: string[];
+  graphCount?: number;
 }
 
 
@@ -39,9 +40,20 @@ export const PageRoutes = {
   downloadpage: {path: "/download/file", component: DownloadFile},
 }
 
-export const PlotTypes = ["Table", "Bar Chart", "Line Graph", "Histogram", "Scatter Chart", "Box Chart" ]
+export const PlotTypes = ["Table", "Bar Chart", "Pie Chart", "Line Graph", "Histogram", "Scatter Chart", "Box Chart" ]
 export const MatPlotTypes = []
 
+export const colorList = [
+  "#00C49F", "#FFBB28", "#FF8042", "#0088FE", 
+  "#AF19FF", "#FF4560", "#775DD0", "#3F51B5", 
+  "#9C27B0", "#00E396", "#FEB019", "#FF66C4", 
+  "#4BC0C0", "#36A2EB", "#9966FF", "#A5C9CA",
+  "#E7F6F2", "#B9FFF8", "#FFD3B6", "#FFAAA5", 
+  "#D5ECC2", "#FFC7C7", "#C1FFD7", "#D9D7F1", 
+  "#FFEBCC", "#8884d8", "#82ca9d", "#ffc658", 
+  "#ff7f7f", "#8dd1e1", "#a4de6c", "#d0ed57", 
+  "#888888", "#ffbb28", "#0088fe",
+];
 
 // ---- Data ----
 export const DataDummy = [

@@ -10,7 +10,9 @@ type DropdownProps = {
   setOpenId: (id: string | null) => void;
   selectedItems: string[];
   setSelectedItems: (items: string[]) => void;
+  multiSelect?: boolean;
 };
+
 
 export const Dropdown: React.FC<DropdownProps> = ({
   label,
@@ -20,6 +22,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
   setOpenId,
   selectedItems,
   setSelectedItems,
+  multiSelect = true,
 }) => {
   const isOpen = openId === id;
   const containerRef = useRef<HTMLDivElement>(null);
@@ -27,14 +30,18 @@ export const Dropdown: React.FC<DropdownProps> = ({
   const toggle = () => setOpenId(isOpen ? null : id);
 
   const handleCheckboxChange = (item: string) => {
-    if (selectedItems.includes(item)) {
-      setSelectedItems(selectedItems.filter(i => i !== item));
+    if (multiSelect) {
+      if (selectedItems.includes(item)) {
+        setSelectedItems(selectedItems.filter(i => i !== item));
+      } else {
+        setSelectedItems([...selectedItems, item]);
+      }
     } else {
-      setSelectedItems([...selectedItems, item]);
+      setSelectedItems([item]);
+      setOpenId(null);
     }
   };
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
@@ -54,17 +61,19 @@ export const Dropdown: React.FC<DropdownProps> = ({
         <ul className="ddropdown-itemsbox">
           {items.map((item, index) => (
             <li key={index} className="ddropdown-item">
-                <label
-                    className="ddropdown-label"
-                    onMouseDown={(e) => e.stopPropagation()}
-                >
-                    <input
+              <label
+                className="ddropdown-label"
+                onMouseDown={(e) => e.stopPropagation()}
+              >
+                {multiSelect && (
+                  <input
                     type="checkbox"
                     checked={selectedItems.includes(String(item))}
                     onChange={() => handleCheckboxChange(String(item))}
-                    />
-                    {item}
-                </label>
+                  />
+                )}
+                <span onClick={() => !multiSelect && handleCheckboxChange(String(item))}>{item}</span>
+              </label>
             </li>
           ))}
         </ul>

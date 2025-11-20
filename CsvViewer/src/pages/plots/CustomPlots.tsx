@@ -1,6 +1,11 @@
 import "../../index.css"
 import "./CustomPlots.css"
-import type { CustomPlotsProps } from "../../Constants";
+import { type CustomPlotsProps, colorList } from "../../Constants";
+import { 
+  XAxis, YAxis, Tooltip, CartesianGrid, Legend,
+  BarChart, Bar, 
+} from "recharts";
+
 
 
 // Table Component
@@ -15,9 +20,9 @@ function PlotTable({ dataSet, selectedColumns }: { dataSet: any; selectedColumns
   }
 
     const columnsToShow =
-        selectedColumns && selectedColumns.length > 0
-            ? selectedColumns
-            : dataSet.columns
+      selectedColumns && selectedColumns.length > 0
+        ? selectedColumns
+        : dataSet.columns
     ;
 
   return (
@@ -46,24 +51,118 @@ function PlotTable({ dataSet, selectedColumns }: { dataSet: any; selectedColumns
   );
 }
 
-function PlotLineGraph({ dataSet, selectedArg, graphCount }: 
-    { dataSet: any; selectedArg: any, graphCount: number } ){
 
+function PlotBarChart({ dataSet, selectedArg, graphCount }: 
+  { dataSet: any; selectedArg: string[]; graphCount: number }) {
 
-    return (
-        <div className="lineGraph-container">
-            
+  if (!selectedArg || selectedArg.length === 0) return <p>Please select variable(s) to plot</p>;
+
+  const xKey = "Name";
+
+  return (
+    <div className="barGraph-container">
+      {[...Array(graphCount)].map((_, i) => (
+        <div key={i} className="graphBox">
+          <BarChart responsive data={dataSet} 
+          style={{ width: '100%', height:"100%", maxHeight: '100%', aspectRatio: 1.618 }}
+          >
+            <CartesianGrid strokeLinejoin="round" />
+            <XAxis dataKey={xKey} />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            {selectedArg.map((arg: string, index: number) => (
+              <Bar 
+                key={index}
+                dataKey={arg}
+                fill={colorList[index % colorList.length]}
+              />
+            ))}
+          </BarChart>
         </div>
-    )
+      ))}
+    </div>
+  );
 }
 
 
-function CustomPlots({ selectedPlot, dataSet, selectedColumns }: CustomPlotsProps) {
+function PlotPieChart({ dataSet, selectedArg, graphCount }:
+  { dataSet: any; selectedArg: string[]; graphCount: number }
+  ){
+  return(
+    <div className="pieChart-container">
+      <p>{dataSet} {selectedArg} {graphCount} </p>
+    </div>
+  );
+}
+
+function PlotLineGraph({ dataSet, selectedArg, graphCount }:
+  { dataSet: any; selectedArg: string[]; graphCount: number }
+  ){
+  return(
+    <div className="pieChart-container">
+      <p>{dataSet} {selectedArg} {graphCount} </p>
+    </div>
+  );
+}
+
+function PlotHistogram({ dataSet, selectedArg, graphCount }:
+  { dataSet: any; selectedArg: string[]; graphCount: number }
+  ){
+  return(
+    <div className="pieChart-container">
+      <p>{dataSet} {selectedArg} {graphCount} </p>
+    </div>
+  );
+}
+
+function PlotScatterChart({ dataSet, selectedArg, graphCount }:
+  { dataSet: any; selectedArg: string[]; graphCount: number }
+  ){
+  return(
+    <div className="pieChart-container">
+      <p>{dataSet} {selectedArg} {graphCount} </p>
+    </div>
+  );
+}
+
+function PlotBoxChart({ dataSet, selectedArg, graphCount }:
+  { dataSet: any; selectedArg: string[]; graphCount: number }
+  ){
+  return(
+    <div className="pieChart-container">
+      <p>{dataSet} {selectedArg} {graphCount} </p>
+    </div>
+  );
+}
+
+
+
+
+function CustomPlots({ dataSet, selectedColumns, selectedPlot="Table", graphCount=1 }: CustomPlotsProps) {
   if (!dataSet) return null;
 
   switch (selectedPlot) {
     case "Table":
       return <PlotTable dataSet={dataSet} selectedColumns={selectedColumns} />;
+    case "Bar Chart":
+      if (!selectedColumns || selectedColumns.length === 0) return <p>Please select variables</p>;
+      return <PlotBarChart dataSet={dataSet.data} selectedArg={selectedColumns} graphCount={graphCount} />;
+    case "Pie Chart":
+      if (!selectedColumns || selectedColumns.length === 0) return <p>Please select variables</p>;
+      return <PlotPieChart dataSet={dataSet.data} selectedArg={selectedColumns} graphCount={graphCount} />;
+    case "Line Graph":
+      if (!selectedColumns || selectedColumns.length === 0) return <p>Please select variables</p>;
+      return <PlotLineGraph dataSet={dataSet.data} selectedArg={selectedColumns} graphCount={graphCount} />;
+    case "Histogram":
+      if (!selectedColumns || selectedColumns.length === 0) return <p>Please select variables</p>;
+      return <PlotHistogram dataSet={dataSet.data} selectedArg={selectedColumns} graphCount={graphCount} />;
+    case "Scatter Chart":
+      if (!selectedColumns || selectedColumns.length === 0) return <p>Please select variables</p>;
+      return <PlotScatterChart dataSet={dataSet.data} selectedArg={selectedColumns} graphCount={graphCount} />;
+    case "Box Chart":
+      if (!selectedColumns || selectedColumns.length === 0) return <p>Please select variables</p>;
+      return <PlotBoxChart dataSet={dataSet.data} selectedArg={selectedColumns} graphCount={graphCount} />;
     default:
       return null;
   }

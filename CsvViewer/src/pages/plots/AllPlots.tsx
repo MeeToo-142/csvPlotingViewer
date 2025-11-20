@@ -107,13 +107,14 @@ function AllPlots() {
             <h2>Actions</h2>
             <div className="plots-actionsbox">
               <Dropdown
-                label="Column"
+                label="Variable"
                 items={fetchedData.columns}
                 id="columns"
                 openId={open}
                 setOpenId={toggleDropdown}
                 selectedItems={selectedColumns}
                 setSelectedItems={setSelectedColumns}
+                multiSelect={true}
               />
 
               <Dropdown
@@ -123,7 +124,8 @@ function AllPlots() {
                 openId={open}
                 setOpenId={toggleDropdown}
                 selectedItems={[selectedPlotType]}
-                setSelectedItems={(arr) => setSelectedPlotType(arr[0] || "Table")}
+                setSelectedItems={(arr) => setSelectedPlotType(arr[0])}
+                multiSelect={false}
               />
             </div>
           </div>
