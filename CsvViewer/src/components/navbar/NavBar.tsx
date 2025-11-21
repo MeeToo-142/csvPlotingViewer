@@ -8,7 +8,7 @@ function NavBar() {
           <a href="/" className="logo">@csvViewer</a>
         </div>
         <div className="navLeft">
-          <a href="/" className="linkto">GitHub</a>
+          <a href="https://github.com/John-Da/csvPlotter-ReactFlask" target="_blank" className="linkto">GitHub</a>
         </div>
     </nav>
   )

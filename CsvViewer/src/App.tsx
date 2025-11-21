@@ -13,6 +13,14 @@ function App() {
         <Route path={PageRoutes.waitingroompage.path} Component={PageRoutes.waitingroompage.component} />
         <Route path={PageRoutes.downloadpage.path} Component={PageRoutes.downloadpage.component} />
       </Routes>
+      <div style={{
+        width:"100%", height:"2.5rem", display:"flex", 
+        alignItems:"center", justifyContent:'center',
+        fontWeight:"200", fontSize:"0.85rem", color:"var(--color-five)",
+        background:"var(--color-eleven)"
+      }}>
+        <p>Copyright © 2025 | csvViewer by John Da. All Rights Reserved</p>
+      </div>
     </Router>
     </>
   );

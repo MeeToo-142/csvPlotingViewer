@@ -1,4 +1,4 @@
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { PageRoutes, PlotTypes, Porxy, type CsvData } from "../../Constants";
 import { useEffect, useState } from "react";
 import "../../index.css";
@@ -11,6 +11,8 @@ function AllPlots() {
   const fileId = searchParams.get("id");
   const fileName = searchParams.get("filename");
 
+  const nevigate = useNavigate();
+
   const [metaData, setMetaData] = useState<any[]>([]);
   const [fetchedData, setFetchedData] = useState<CsvData | null>(null);
   const [open, setOpen] = useState<string | null>(null);
@@ -22,6 +24,15 @@ function AllPlots() {
   const toggleDropdown = (id: string | null) => {
     setOpen(prev => (prev === id ? null : id));
   };
+
+  const handleDownloadCSV = () => {
+    console.log("CSV File downloaded...")
+  }
+
+  const handleConvertCSV = (fileType: string) => {
+    const url = `${PageRoutes.waitingroompage.path}?id=${fileId}&filename=${fileName}&filetype=${fileType}`
+    nevigate(url);
+  }
 
   // Fetch CSV data
   useEffect(() => {
@@ -137,8 +148,8 @@ function AllPlots() {
             </div>
 
             <div className="otheractions">
-              <button>Download CSV</button>
-              <button>CSV to JSON</button>
+              <button onClick={handleDownloadCSV}>Download CSV</button>
+              <button onClick={() => handleConvertCSV("json")}>CSV to JSON</button>
             </div>
           </div>
         </div>

@@ -76,10 +76,25 @@ def delete_csv():
 
 @app.route("/convert/file", methods=["GET"])
 def convert_csvto():
-    data = request.json
-    file_id = data.get("id")
-    filename = data.get("filename")
-    convertTo = data.get("filetype")
+    file_id = request.args.get("id")
+    filename = request.args.get("filename")
+    filetype = request.args.get("filetype")
+
+    if not file_id or not filename:
+        return jsonify({"error": "Missing id or filename"}), 400
+
+    path = os.path.join(UPLOAD_FOLDER, f"{file_id}_{filename}")
+    if not os.path.exists(path):
+        return jsonify({"error": "File not found"}), 404
+    
+    df = pd.read_csv(path)
+
+    if filetype == "json":
+        convertedFile = df.to_json()
+    elif filetype == "yolo":
+        csvtojson = df.to_json()
+        # jsontoyolo =
+
     return
 
 

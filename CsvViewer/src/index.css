@@ -26,9 +26,18 @@
   --color-twelve: rgba(255, 255, 255, 0.87);
 }
 
-*{
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+*::-webkit-scrollbar { 
+  width: 8px; height: 8px; 
+}
+
+*::-webkit-scrollbar-thumb { 
+  background: rgba(0,0,0,0.15); 
+  border-radius: 6px; 
+}
+
+* { 
+  box-sizing: border-box; margin: 0; 
+  padding: 0; scrollbar-width: thin; 
+  scrollbar-color: rgba(0,0,0,0.15) transparent; 
 }
 

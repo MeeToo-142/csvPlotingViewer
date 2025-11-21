@@ -17,7 +17,6 @@ function Home() {
   const uploadRef = useRef<HTMLDivElement | null>(null);
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const menuRefs = useRef<Record<string, HTMLDivElement | null>>({});
-
   
   
   const [sortType, setSortType] = useState<"recent" | "az">(

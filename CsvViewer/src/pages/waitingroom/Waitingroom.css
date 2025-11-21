@@ -1,0 +1,85 @@
+
+
+.emptypage-container{
+    height: 100vh;
+    width: 100%;
+    padding: 6rem 6rem 1rem 6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.downloadBtn {
+  background: var(--color-five);
+  border-radius: 6px;
+  border: none;
+  box-shadow: 0 0 10px rgba(0,0,0,0.15);
+  height: 3rem;
+  width: 10rem;
+  font-size: 1.07rem;
+  font-weight: 700;
+  color: var(--color-seven);
+  transition: all 180ms ease;
+  outline: none;
+}
+
+/* Hover only when NOT disabled */
+.downloadBtn:not(.disabled):hover {
+  transform: scale(1.06) translateY(-3px);
+  background-color: var(--color-two);
+  cursor: pointer;
+}
+
+/* Disabled styling */
+.downloadBtn.disabled {
+  background: #99999955;
+  color: #ffffff88;
+  box-shadow: none;
+  transform: none;
+  cursor: not-allowed;
+}
+
+
+.emptypage-topbox{
+    width: 100%;
+    height: 6rem;
+    align-items: center;
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+}
+
+.emptypage-bottombox{
+    width: 100%;
+    height: 10rem;
+    gap: 1rem;
+    align-items: center;
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+}
+
+.progresstxt-box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 3.5rem;
+}
+
+.progresstxt-box span{
+    font-size: 1.05rem;
+}
+
+.percentage{
+    color: var(--color-nine);
+    font-weight: 700;
+}
+
+.progressbar-box{
+    border: 1px solid orchid;
+    display: flex;
+    width: 800px;
+    height: 1.35rem;
+}
+
