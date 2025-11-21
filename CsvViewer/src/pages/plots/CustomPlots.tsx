@@ -1,16 +1,16 @@
-import "../../index.css"
-import "./CustomPlots.css"
+import "../../index.css";
+import "./CustomPlots.css";
 import { type CustomPlotsProps, colorList } from "../../Constants";
-import { 
+import {
   XAxis, YAxis, Tooltip, CartesianGrid, Legend,
-  BarChart, Bar, 
+  BarChart, Bar,
 } from "recharts";
+import { Dropdown } from "../../components/dropdowns/DropDown";
+import { useState } from "react";
 
 
-
-// Table Component
-function PlotTable({ dataSet, selectedColumns }: { dataSet: any; selectedColumns?: string[] }) {
-  // Defensive check
+// ---------------- TABLE ----------------
+function PlotTable({ dataSet }: { dataSet: any; selectedColumns?: string[] }) {
   if (!dataSet || !dataSet.columns || !dataSet.data) {
     return (
       <div className="empty-box">
@@ -19,14 +19,50 @@ function PlotTable({ dataSet, selectedColumns }: { dataSet: any; selectedColumns
     );
   }
 
-    const columnsToShow =
-      selectedColumns && selectedColumns.length > 0
-        ? selectedColumns
-        : dataSet.columns
-    ;
+  const [selectedColumns, setSelectedColumns] = useState<string[]>([]);
+  const [selectedRow, setSelectedRows] = useState<string[]>([]);
+  const [open, setOpen] = useState<string | null>(null);
+  const toggleDropdown = (id: string | null) => setOpen(id);
+
+  const uniqueNames = [...new Set(
+    dataSet.data.map((row: any) => row.Name)
+  )] as (string | number)[];
+
+  const columnsToShow =
+    selectedColumns.length > 0 ? selectedColumns : dataSet.columns;
+
+  const rowsToShow =
+    selectedRow.length > 0
+      ? dataSet.data.filter((row: any) => selectedRow.includes(row.Name))
+      : dataSet.data;
 
   return (
     <div className="ctableContainer">
+      <div className="actionbox-header">
+
+        <Dropdown
+          label="By Column"
+          items={dataSet.columns}
+          id="columns"
+          openId={open}
+          setOpenId={toggleDropdown}
+          selectedItems={selectedColumns}
+          setSelectedItems={setSelectedColumns}
+          multiSelect={true}
+        />
+
+        <Dropdown
+          label="By Row"
+          items={uniqueNames}
+          id="rows"
+          openId={open}
+          setOpenId={toggleDropdown}
+          selectedItems={selectedRow}
+          setSelectedItems={setSelectedRows}
+          multiSelect={true}
+        />
+      </div>
+
       <div className="ctable-wrapper">
         <table className="ctable">
           <thead>
@@ -36,8 +72,9 @@ function PlotTable({ dataSet, selectedColumns }: { dataSet: any; selectedColumns
               ))}
             </tr>
           </thead>
+
           <tbody>
-            {dataSet.data.map((row: any, rowIdx: number) => (
+            {rowsToShow.map((row: any, rowIdx: number) => (
               <tr key={rowIdx} className="ctable-row">
                 {columnsToShow.map((col: string, colIdx: number) => (
                   <td key={colIdx} className="ctable-cell">{row[col]}</td>
@@ -52,33 +89,76 @@ function PlotTable({ dataSet, selectedColumns }: { dataSet: any; selectedColumns
 }
 
 
-function PlotBarChart({ dataSet, selectedArg, graphCount }: 
-  { dataSet: any; selectedArg: string[]; graphCount: number }) {
+// ---------------- BAR CHART ----------------
+function PlotBarChart({
+  dataSet,
+  selectedArg,
+  graphCount
+}: { dataSet: any; selectedArg: string[]; graphCount: number }) {
 
-  if (!selectedArg || selectedArg.length === 0) return <p>Please select variable(s) to plot</p>;
+  if (selectedArg.length === 0) return <p>Please select variable(s) to plot</p>;
 
-  const xKey = "Name";
+  const [open, setOpen] = useState<string | null>(null);
+  const toggleDropdown = (id: string | null) => setOpen(id);
 
   return (
     <div className="barGraph-container">
       {[...Array(graphCount)].map((_, i) => (
-        <div key={i} className="graphBox">
-          <BarChart responsive data={dataSet} 
-          style={{ width: '100%', height:"100%", maxHeight: '100%', aspectRatio: 1.618 }}
-          >
-            <CartesianGrid strokeLinejoin="round" />
-            <XAxis dataKey={xKey} />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            {selectedArg.map((arg: string, index: number) => (
-              <Bar 
-                key={index}
-                dataKey={arg}
-                fill={colorList[index % colorList.length]}
-              />
-            ))}
-          </BarChart>
+        <div className="barGraph-box">
+          <div className="barChart-header">
+
+            <Dropdown
+              label="Argument ( X )"
+              items={Object.keys(dataSet[0] || {})}
+              id="xarg"
+              openId={open}
+              setOpenId={toggleDropdown}
+              selectedItems={[]}
+              setSelectedItems={() => ""}
+              multiSelect={false}
+            />
+
+            <Dropdown
+              label="Argument ( Y )"
+              items={Object.keys(dataSet[0] || {})}
+              id="yarg"
+              openId={open}
+              setOpenId={toggleDropdown}
+              selectedItems={[]}
+              setSelectedItems={() => ""}
+              multiSelect={false}
+            />
+
+            <Dropdown
+              label="Item"
+              items={Object.keys(dataSet[0] || {})}
+              id="yarg"
+              openId={open}
+              setOpenId={toggleDropdown}
+              selectedItems={[]}
+              setSelectedItems={() => ""}
+              multiSelect={false}
+            />
+
+
+          </div>
+
+          <div key={i} className="graphBox">
+            <BarChart width={600} height={400} data={dataSet}>
+              <CartesianGrid />
+              <XAxis dataKey="Name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              {selectedArg.map((arg: string, index: number) => (
+                <Bar
+                  key={index}
+                  dataKey={arg}
+                  fill={colorList[index % colorList.length]}
+                />
+              ))}
+            </BarChart>
+          </div>
         </div>
       ))}
     </div>
@@ -86,86 +166,48 @@ function PlotBarChart({ dataSet, selectedArg, graphCount }:
 }
 
 
-function PlotPieChart({ dataSet, selectedArg, graphCount }:
-  { dataSet: any; selectedArg: string[]; graphCount: number }
-  ){
-  return(
+// --- Placeholder Components ---
+function Placeholder(props: any) {
+  return (
     <div className="pieChart-container">
-      <p>{dataSet} {selectedArg} {graphCount} </p>
-    </div>
-  );
-}
-
-function PlotLineGraph({ dataSet, selectedArg, graphCount }:
-  { dataSet: any; selectedArg: string[]; graphCount: number }
-  ){
-  return(
-    <div className="pieChart-container">
-      <p>{dataSet} {selectedArg} {graphCount} </p>
-    </div>
-  );
-}
-
-function PlotHistogram({ dataSet, selectedArg, graphCount }:
-  { dataSet: any; selectedArg: string[]; graphCount: number }
-  ){
-  return(
-    <div className="pieChart-container">
-      <p>{dataSet} {selectedArg} {graphCount} </p>
-    </div>
-  );
-}
-
-function PlotScatterChart({ dataSet, selectedArg, graphCount }:
-  { dataSet: any; selectedArg: string[]; graphCount: number }
-  ){
-  return(
-    <div className="pieChart-container">
-      <p>{dataSet} {selectedArg} {graphCount} </p>
-    </div>
-  );
-}
-
-function PlotBoxChart({ dataSet, selectedArg, graphCount }:
-  { dataSet: any; selectedArg: string[]; graphCount: number }
-  ){
-  return(
-    <div className="pieChart-container">
-      <p>{dataSet} {selectedArg} {graphCount} </p>
+      {[...Array(props.graphCount)].map((_, i) => (
+        <p key={i}>{JSON.stringify(props)}</p>
+      ))}
     </div>
   );
 }
 
 
-
-
-function CustomPlots({ dataSet, selectedColumns, selectedPlot="Table", graphCount=1 }: CustomPlotsProps) {
+// ---------------- MAIN ROUTER ----------------
+function CustomPlots({ dataSet, selectedPlot = "Table", selectedArg = [], graphCount = 1 }: CustomPlotsProps) {
   if (!dataSet) return null;
 
   switch (selectedPlot) {
     case "Table":
-      return <PlotTable dataSet={dataSet} selectedColumns={selectedColumns} />;
+      return <PlotTable dataSet={dataSet} />;
+
     case "Bar Chart":
-      if (!selectedColumns || selectedColumns.length === 0) return <p>Please select variables</p>;
-      return <PlotBarChart dataSet={dataSet.data} selectedArg={selectedColumns} graphCount={graphCount} />;
+      if (selectedArg.length === 0) return <p>Please select variables</p>;
+      return <PlotBarChart dataSet={dataSet.data} selectedArg={selectedArg} graphCount={graphCount} />;
+
     case "Pie Chart":
-      if (!selectedColumns || selectedColumns.length === 0) return <p>Please select variables</p>;
-      return <PlotPieChart dataSet={dataSet.data} selectedArg={selectedColumns} graphCount={graphCount} />;
+      return <Placeholder dataSet={dataSet.data} selectedArg={selectedArg} graphCount={graphCount} />;
+
     case "Line Graph":
-      if (!selectedColumns || selectedColumns.length === 0) return <p>Please select variables</p>;
-      return <PlotLineGraph dataSet={dataSet.data} selectedArg={selectedColumns} graphCount={graphCount} />;
+      return <Placeholder dataSet={dataSet.data} selectedArg={selectedArg} graphCount={graphCount} />;
+
     case "Histogram":
-      if (!selectedColumns || selectedColumns.length === 0) return <p>Please select variables</p>;
-      return <PlotHistogram dataSet={dataSet.data} selectedArg={selectedColumns} graphCount={graphCount} />;
+      return <Placeholder dataSet={dataSet.data} selectedArg={selectedArg} graphCount={graphCount} />;
+
     case "Scatter Chart":
-      if (!selectedColumns || selectedColumns.length === 0) return <p>Please select variables</p>;
-      return <PlotScatterChart dataSet={dataSet.data} selectedArg={selectedColumns} graphCount={graphCount} />;
+      return <Placeholder dataSet={dataSet.data} selectedArg={selectedArg} graphCount={graphCount} />;
+
     case "Box Chart":
-      if (!selectedColumns || selectedColumns.length === 0) return <p>Please select variables</p>;
-      return <PlotBoxChart dataSet={dataSet.data} selectedArg={selectedColumns} graphCount={graphCount} />;
+      return <Placeholder dataSet={dataSet.data} selectedArg={selectedArg} graphCount={graphCount} />;
+
     default:
       return null;
   }
-};
+}
 
 export default CustomPlots;

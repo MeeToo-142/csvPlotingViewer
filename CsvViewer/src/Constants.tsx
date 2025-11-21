@@ -16,7 +16,7 @@ export interface UploadData {
 export interface CustomPlotsProps {
   selectedPlot: string;
   dataSet: any;
-  selectedColumns?: string[];
+  selectedArg?: string[];
   graphCount?: number;
 }
 
@@ -28,6 +28,16 @@ export interface CsvData {
   NaN:any
 }
 
+export type DropdownProps = {
+  label: string;
+  items: (string | number)[];
+  id: string;
+  openId: string | null;
+  setOpenId: (id: string | null) => void;
+  selectedItems: string[];
+  setSelectedItems: (items: string[]) => void;
+  multiSelect?: boolean;
+};
 
 
 

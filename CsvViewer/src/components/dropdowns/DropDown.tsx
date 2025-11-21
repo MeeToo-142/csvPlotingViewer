@@ -1,17 +1,8 @@
 import { useEffect, useRef } from "react";
 import "../../index.css";
 import "./DropDown.css";
+import type { DropdownProps } from "../../Constants";
 
-type DropdownProps = {
-  label: string;
-  items: (string | number)[];
-  id: string;
-  openId: string | null;
-  setOpenId: (id: string | null) => void;
-  selectedItems: string[];
-  setSelectedItems: (items: string[]) => void;
-  multiSelect?: boolean;
-};
 
 
 export const Dropdown: React.FC<DropdownProps> = ({

@@ -16,7 +16,6 @@ function AllPlots() {
   const [open, setOpen] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedColumns, setSelectedColumns] = useState<string[]>([]);
   const [selectedPlotType, setSelectedPlotType] = useState<string>("Table");
 
 
@@ -86,7 +85,6 @@ function AllPlots() {
             <CustomPlots
               selectedPlot={selectedPlotType}
               dataSet={fetchedData}
-              selectedColumns={selectedColumns}
             />
           </div>
 
@@ -104,30 +102,17 @@ function AllPlots() {
         <div className="allplots-rightcon">
           {/* DROPDOWNS */}
           <div className="infoMeta">
-            <h2>Actions</h2>
-            <div className="plots-actionsbox">
-              <Dropdown
-                label="Variable"
-                items={fetchedData.columns}
-                id="columns"
-                openId={open}
-                setOpenId={toggleDropdown}
-                selectedItems={selectedColumns}
-                setSelectedItems={setSelectedColumns}
-                multiSelect={true}
-              />
-
-              <Dropdown
-                label="Plot Type"
-                items={PlotTypes}
-                id="plotType"
-                openId={open}
-                setOpenId={toggleDropdown}
-                selectedItems={[selectedPlotType]}
-                setSelectedItems={(arr) => setSelectedPlotType(arr[0])}
-                multiSelect={false}
-              />
-            </div>
+            <h2>Choose Plot:</h2>
+            <Dropdown
+              label="Plot Type"
+              items={PlotTypes}
+              id="plotType"
+              openId={open}
+              setOpenId={toggleDropdown}
+              selectedItems={[selectedPlotType]}
+              setSelectedItems={(arr) => setSelectedPlotType(arr[0])}
+              multiSelect={false}
+            />
           </div>
 
           {/* CSV INFO BOX */}

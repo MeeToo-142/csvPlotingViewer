@@ -73,7 +73,6 @@
   width: 100%;
   height: 100%;
   padding: 1rem 0;
-  /* border: 1px solid green; */
 }
 
 .graphBox {
@@ -82,5 +81,12 @@
   width: 100%;
   border-radius: 8px;
   box-sizing: border-box;
-  /* border: 1px solid red; */
+}
+
+.actionbox-header{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
