@@ -1,4 +1,4 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { PageRoutes, PlotTypes, Porxy, type CsvData } from "../../Constants";
 import { useEffect, useState } from "react";
 import "../../index.css";
@@ -10,8 +10,6 @@ function AllPlots() {
   const [searchParams] = useSearchParams();
   const fileId = searchParams.get("id");
   const fileName = searchParams.get("filename");
-
-  const nevigate = useNavigate();
 
   const [metaData, setMetaData] = useState<any[]>([]);
   const [fetchedData, setFetchedData] = useState<CsvData | null>(null);
@@ -25,14 +23,34 @@ function AllPlots() {
     setOpen(prev => (prev === id ? null : id));
   };
 
-  const handleDownloadCSV = () => {
-    console.log("CSV File downloaded...")
-  }
+  // Download original CSV
+  const handleDownloadCSV = async () => {
+    try {
+      const res = await fetch(
+        `${Porxy}${PageRoutes.downloadpage.path}?id=${fileId}&filename=${fileName}`
+      );
 
-  const handleConvertCSV = (fileType: string) => {
-    const url = `${PageRoutes.waitingroompage.path}?id=${fileId}&filename=${fileName}&filetype=${fileType}`
-    nevigate(url);
-  }
+      if (!res.ok) throw new Error("Failed to download file");
+
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = fileName || "download.csv";
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Download failed:", error);
+    }
+  };
+
+  // Open conversion page (WaitingRoom)
+  const handleConvertCSV = (targetType: string) => {
+    const url = `${PageRoutes.waitingroompage.path}?id=${fileId}&filename=${fileName}&filetype=${targetType}`;
+    window.open(url, "_blank");
+  };
+
 
   // Fetch CSV data
   useEffect(() => {

@@ -68,6 +68,14 @@ function Home() {
     // console.log(url);
   };
 
+  const handleConvertCSV = (id: string, targetType: string) => {
+    const conversion: UploadData[] = JSON.parse(localStorage.getItem("uploadedFiles") || "[]");
+    const fileData = conversion.find(f => f.id === id);
+    if (!fileData) return alert("File not found");
+
+    const url = `${PageRoutes.waitingroompage.path}?id=${fileData.id}&filename=${fileData.fileName}&filetype=${targetType}`;
+    window.open(url, "_blank");
+  };
 
   const handleDelete = async (id: string) => {
     const uploads: UploadData[] = JSON.parse(localStorage.getItem("uploadedFiles") || "[]");
@@ -234,7 +242,7 @@ function Home() {
                       <button onClick={e => handleMenuClick(e, item.id)}><img src={MenuIcon} alt="menu" /></button>
                       {openMenuId === item.id && (
                         <div className="actionsBox" style={{ top: menuPosition.y - 73 + "px", left: menuPosition.x + 60 + "px" }}>
-                          <button>csv<span>2</span>Json</button>
+                          <button onClick={() => handleConvertCSV(item.id, "json")}>csv<span>2</span>Json</button>
                           <button onClick={() => handleView(item.id)}>View</button>
                           <button onClick={() => handleDelete(item.id)}>Delete</button>
                         </div>
