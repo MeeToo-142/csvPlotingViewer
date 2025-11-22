@@ -1,11 +1,11 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import NavBar from "./components/navbar/NavBar";
 import { PageRoutes } from "./Constants";
 
 function App() {
   return (
     <>
-    <Router basename={`${import.meta.env.BASE_URL}`}>
+    <Router>
       <NavBar />
       <Routes>
         <Route path={PageRoutes.homepage.path} Component={PageRoutes.homepage.component} />
