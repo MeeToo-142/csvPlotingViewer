@@ -45,9 +45,9 @@ export const Porxy = 'https://csvviewer-flask.onrender.com'
 // export const Porxy = 'http://127.0.0.1:5000'
 
 export const PageRoutes = {
-  homepage: {path: "/", component: Home},
-  viewplotspage: {path: "/view-plots", component: AllPlots},
-  waitingroompage: {path: "/convert/file", component: WaitingRoom},
+  homepage: {path: `${import.meta.env.BASE_URL}`, component: Home},
+  viewplotspage: {path: `${import.meta.env.BASE_URL}view-plots`, component: AllPlots},
+  waitingroompage: {path: `${import.meta.env.BASE_URL}convert/file`, component: WaitingRoom},
 }
 
 export const PlotTypes = [
