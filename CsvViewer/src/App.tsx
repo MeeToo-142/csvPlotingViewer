@@ -5,7 +5,7 @@ import { PageRoutes } from "./Constants";
 function App() {
   return (
     <>
-    <Router basename={`/csvViewer-ReactFlask`}>
+    <Router basename={`${import.meta.env.BASE_URL}`}>
       <NavBar />
       <Routes>
         <Route path={PageRoutes.homepage.path} Component={PageRoutes.homepage.component} />
