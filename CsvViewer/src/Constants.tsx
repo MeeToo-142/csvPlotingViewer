@@ -41,7 +41,8 @@ export interface PlotBarChartProps {
 }
 
 
-export const Porxy = 'http://127.0.0.1:5000'
+export const Porxy = 'https://csvviewer-flask.onrender.com'
+// export const Porxy = 'http://127.0.0.1:5000'
 
 export const PageRoutes = {
   homepage: {path: "/", component: Home},
